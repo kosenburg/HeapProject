@@ -1,69 +1,95 @@
 import java.util.Arrays;
 
 /**
- * Created by Kevin on 4/30/2017.
+ * Created by Kevin on 5/1/2017.
  */
 public class MinHeap {
+    private static final int DEFAULT_HEAP_SIZE = 10;
     private int[] heap;
-    private int currentSize = 0;
     private long numberOfSwaps = 0;
+    private int currentHeapSize;
 
     public MinHeap() {
-        heap = new int[10];
+        setHeap(DEFAULT_HEAP_SIZE);
+        currentHeapSize = 0;
     }
 
-    public MinHeap(int[] values) {
-        int currentSize = values.length;
+    public MinHeap(int[] array) {
+        setHeap(array.length * 2);
+        currentHeapSize = array.length;
 
-        heap = new int[currentSize * 2];
-
-        for (int i = 1; i < values.length; i++) {
-            heap[i] = values[i - 1];
+        for (int i = 1; i <= array.length; i++) {
+            heap[i] = array[i - 1];
         }
+
         buildHeap();
     }
 
     private void buildHeap() {
-        for (int i = currentSize / 2; i > 0; i--) {
+        System.out.println("Building heap..");
+        for (int i = currentHeapSize / 2; i > 0; i--) {
             percolateDown(i);
         }
     }
 
-    private void percolateDown(int i) {
+    private void percolateDown(int hole) {
+        int child;
+        int temp = heap[hole];
 
+        while( hole * 2 <= currentHeapSize) {
+            child = hole * 2;
+            if (child != currentHeapSize && heap[child + 1] < heap[child]) {
+                child++;
+            }
+
+            if (heap[child] < temp) {
+                heap[hole] = heap[child];
+            } else {
+                break;
+            }
+            hole = child;
+        }
+        heap[hole] = temp;
+    }
+
+    private void setHeap(int length) {
+        heap = new int[length];
     }
 
     public void insert(int value) {
-        if (currentSize == heap.length - 1) {
-            increaseArray();
+        checkSize();
+
+        int hole = ++currentHeapSize;
+
+        while (hole > 1 && value < heap[hole / 2]) {
+            percolateUp(hole);
+            hole = hole / 2;
         }
 
-        int hole = ++currentSize;
         heap[hole] = value;
-
-        while(heap[currentSize] > heap[getParent(currentSize)]) {
-            swap(currentSize, getParent(currentSize));
-            currentSize = getParent(currentSize);
-        }
     }
 
-    private void swap(int firstPosition, int secondPosition) {
+
+    private void percolateUp(int hole) {
+        //System.out.println("Swapping " + heap[hole / 2] + " with " + heap[hole]);
         numberOfSwaps++;
-        int temp;
-        temp = heap[firstPosition];
-        heap[firstPosition] = heap[secondPosition];
-        heap[secondPosition] = temp;
+        heap[hole] = heap[hole / 2];
     }
 
-    private void increaseArray() {
-        heap = Arrays.copyOf(heap, heap.length * 2);
-    }
-
-    private int getParent(int position) {
-        return position / 2;
+    private void checkSize() {
+        if (currentHeapSize == heap.length - 1) {
+            heap = Arrays.copyOf(heap, heap.length * 2);
+        }
     }
 
     public long getNumberOfSwaps() {
         return numberOfSwaps;
+    }
+
+    public void printInOrder() {
+        for (int i = 1; i < currentHeapSize + 1; i++) {
+            System.out.print(heap[i] + " ");
+        }
+        System.out.println();
     }
 }
