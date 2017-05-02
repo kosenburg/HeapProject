@@ -20,24 +20,9 @@ public class Main {
         heap.printInOrder();
         System.out.println();
 
-        /*
-        heap.insert(6);
-        heap.insert(7);
-        heap.insert(12);
-        heap.insert(10);
-        heap.insert(15);
-        heap.insert(17);
-        heap.insert(5);
-        heap.printInOrder();
-        System.out.println("Number of swaps: " + heap.getNumberOfSwaps() + "\n");
-        */
-
-
-    //int[] array = new int[] {6,10,12,7,15,17,5};
-
         System.out.println("Build Heap Run");
-    runTime = System.nanoTime();
-    heap = new MinHeap(temp);
+        runTime = System.nanoTime();
+        heap = new MinHeap(temp);
         System.out.println("The run time is: " + (System.nanoTime() - runTime) + " ns");
         heap.printInOrder();
 }
