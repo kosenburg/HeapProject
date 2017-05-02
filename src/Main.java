@@ -1,22 +1,45 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
  * Created by Kevin on 5/1/2017.
  */
 public class Main {
-    //TODO make graph of runs!
     private static BufferedWriter writer;
 
     public static void main(String[] args) throws IOException {
+        MinHeap heap = new MinHeap();
+        int[] temp = getRandomList(10);
+        System.out.println("Initial Random list: " + Arrays.toString(temp));
+
+        System.out.println("Executing insert alg...");
+        for (int value: temp) {
+            heap.insert(value);
+        }
+
+        System.out.println("Results from inserting:");
+        System.out.println("Heap:");
+        heap.printInOrder();
+        System.out.println("Number of swaps: " + heap.getNumberOfSwaps());
+        System.out.println();
 
 
+        System.out.println("Executing build alg...");
+        heap = new MinHeap(temp);
+        System.out.println("Results from build:");
+        System.out.println("Heap:");
+        heap.printInOrder();
+
+
+        // To execute for input size and write runtimes to runTimeResults.csv
+        //executeRunCollections();
     }
 
     private static void executeRunCollections() throws IOException {
-        writer = new BufferedWriter(new FileWriter("runTimeResults"));
+        writer = new BufferedWriter(new FileWriter("runTimeResults.csv"));
 
         for (int i = 5000; i <= 50000; i += 5000 ) {
             int[] tempList = getRandomList(i);
